@@ -1,0 +1,26 @@
+This complete game package contains everything you need to build your own runner game - tracks, obstacles, characters, collectibles, environment, and more!
+***************************************************************************************
+This complete runner game package contains:
+Modular track - 11 pieces in 4 variations of colors
+120 animated Traps & Obstacles (30 different obstacles in 4 color variations)
+12 Characters - 3 different character models in 4 color variations
+Collectibles - Diamonds with particles (blue, green, orange, purple, red, yellow), Coins (bronze, silver, gold), Heart, Star
+Doors - 8 variations
+Boosters - 4 variations
+Buildings - 36 prefabs (9 building models in 4 color variations)
+Clouds - 7 variations
+Vertical Fog Shader
+Toon Shader
+
+***************************************************************************************
+VFX & Shader graphs included are compatible with URP render pipeline.
+All models and animations are compatible with all render pipelines (Core, URP, HDRP)
+***************************************************************************************
+Number of textures: 1
+Type of texture maps: PNG
+Texture dimensions: 512 X 512
+Number of meshes/prefabs: 120
+Average polygon count: 36-7460
+***************************************************************************************
+Thank you for purchasing our pack and supporting us!
+If you like our work and would like us to create a model or package on your request - send us an email and let's talk!
