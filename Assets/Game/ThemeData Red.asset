@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43dff12ada7f4cd6844e3c1d801ac92, type: 3}
+  m_Name: ThemeData Red
+  m_EditorClassIdentifier: 
+  themeName: Red
+  fogMaterial: {fileID: 2100000, guid: 665787df582e7e34994524eb41cc3ab2, type: 2}
+  skyboxMaterial: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
