@@ -47,8 +47,8 @@ public class UserAgreementPanel : MonoBehaviour
         checkBox1Button.onClick.AddListener(() => ToggleCheckbox(1));
         checkBox2Button.onClick.AddListener(() => ToggleCheckbox(2));
 
-        privacyButton.onClick.AddListener(() => OpenPanel(privacyPolicyPanel));
-        termsButton.onClick.AddListener(() => OpenPanel(termsPanel));
+        //privacyButton.onClick.AddListener(() => OpenPanel(privacyPolicyPanel));
+        //termsButton.onClick.AddListener(() => OpenPanel(termsPanel));
 
         startButton.onClick.AddListener(OnStartClicked);
     }

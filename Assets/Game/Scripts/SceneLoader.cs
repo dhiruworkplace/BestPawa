@@ -7,7 +7,6 @@ public class SceneLoader : MonoBehaviour
 {
     [Header("UI Elements")]
     public Image loadingFillImage; // Assign in Inspector (type: Filled Image)
-    public GameObject loadingCanvas; // Optional: loading screen container
 
     [Header("Settings")]
     public string sceneToLoad; // Name of the scene to load
@@ -15,19 +14,17 @@ public class SceneLoader : MonoBehaviour
 
     void Start()
     {
-        LoadScene();
+        Invoke(nameof(LoadScene), 3f);
     }
 
     public void LoadScene()
     {
-        StartCoroutine(LoadSceneAsync());
+        SceneManager.LoadScene("Game");
+        //StartCoroutine(LoadSceneAsync());
     }
 
     private IEnumerator LoadSceneAsync()
     {
-        if (loadingCanvas != null)
-            loadingCanvas.SetActive(true);
-
         // Start loading the scene in background
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
         operation.allowSceneActivation = false;
