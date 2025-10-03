@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 [System.Serializable]
@@ -34,20 +35,19 @@ public class ProgressManager : MonoBehaviour
     private const string SAVE_KEY = "GameProgress";
 
     // Event fired when character is selected
-    public event Action<int> OnCharacterSelected;
+    public Action<int> OnCharacterSelected;
+
+    public TextMeshProUGUI questTimer;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            LoadProgress();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
+        LoadProgress();
+    }
+
+    private void Start()
+    {
+        InvokeRepeating(nameof(CheckQuest), 0f, 1f);
     }
 
     #region Save / Load
@@ -235,4 +235,51 @@ public class ProgressManager : MonoBehaviour
 
 
     #endregion
+
+    private void StopTimer()
+    {
+        CancelInvoke(nameof(CheckQuest));
+    }
+
+    private void CheckQuest()
+    {
+        DateTime lastDT = new DateTime();
+        if (!PlayerPrefs.HasKey("rewardTime"))
+        {
+            //PlayerPrefs.SetString("lastSpin", DateTime.Now.AddHours(24).ToString());
+            //PlayerPrefs.Save();
+
+            questTimer.text = "Claim";
+            StopTimer();
+            return;
+        }
+        else
+        {
+            int inx = PlayerPrefs.GetInt("dayValue", 0);
+            if (inx >= 7)
+            {
+                questTimer.text = "All Claimed";
+                StopTimer();
+                return;
+            }
+        }
+        lastDT = DateTime.Parse(PlayerPrefs.GetString("rewardTime"));
+
+        TimeSpan diff = (lastDT - DateTime.Now);
+        questTimer.text = string.Format("{0:D2}:{1:D2}:{2:D2}", diff.Hours, diff.Minutes, diff.Seconds);
+
+        if (diff.TotalSeconds <= 0)
+        {
+            StopTimer();
+            questTimer.text = "Claim";
+        }
+    }
+
+    public void StartTimer()
+    {
+        PlayerPrefs.SetString("rewardTime", DateTime.Now.AddHours(24).ToString());
+        PlayerPrefs.Save();
+
+        InvokeRepeating(nameof(CheckQuest), 0f, 1f);
+    }
 }

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Level_23
   m_EditorClassIdentifier: 
   levelName: Level_23
+  lanes: 4
   walls:
   - width: 4
     height: 10

@@ -6,11 +6,11 @@ public class PlayerAppearance : MonoBehaviour
     public Renderer playerRenderer;
     public Material defaultMaterial;
 
-    public CharacterData[] characters;
+    public Material[] characters;
 
     private void Start()
     {
-        ApplySelectedCharacterMaterial(ProgressManager.Instance.Progress.selectedCharacterIndex);
+        ApplySelectedCharacterMaterial(GameManager.selectedCube);
 
         // Listen for character change event
         ProgressManager.Instance.OnCharacterSelected += ApplySelectedCharacterMaterial;
@@ -25,17 +25,19 @@ public class PlayerAppearance : MonoBehaviour
 
     private void ApplySelectedCharacterMaterial(int index)
     {
-        if (index < 0 || index >= characters.Length)
-        {
-            if (playerRenderer != null && defaultMaterial != null)
-                playerRenderer.material = defaultMaterial;
-            return;
-        }
+        //if (index < 0 || index >= characters.Length)
+        //{
+        //    if (playerRenderer != null && defaultMaterial != null)
+        //        playerRenderer.material = defaultMaterial;
+        //    return;
+        //}
 
-        var selectedChar = characters[index];
-        if (selectedChar != null && selectedChar.material != null)
-            playerRenderer.material = selectedChar.material;
-        else if (defaultMaterial != null)
-            playerRenderer.material = defaultMaterial;
+        //var selectedChar = characters[index];
+        //if (selectedChar != null && selectedChar.material != null)
+        //    playerRenderer.material = selectedChar.material;
+        //else if (defaultMaterial != null)
+        //    playerRenderer.material = defaultMaterial;
+
+        playerRenderer.material = characters[index];
     }
 }

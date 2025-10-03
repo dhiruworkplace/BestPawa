@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +11,14 @@ public class GameManager : MonoBehaviour
     [Header("Levels")]
     public List<LevelData> classicLevels; // assign in inspector
     public List<LevelData> proLevels;     // assign in inspector
+    public Challanges[] challengeLevels;
 
     [Header("Mode Flags")]
     public static bool IsProMode = false;
     public static int CurrentProLevelIndex = -1; // stores last Pro Mode level
-
+    public static int selectedCube = 0;
+    public static List<string> letters = new List<string>();
+    
     private void Awake()
     {
         if (Instance == null)
@@ -30,7 +34,7 @@ public class GameManager : MonoBehaviour
         // After reload, check if we should load a level directly
         if (GameUIManager.StartDirectly)
         {
-            LoadLevelByMode(IsProMode);
+            LoadLevelByMode(LevelLoader.gameType);
         }
 
         // ❌ No auto-load here — menu buttons will call LoadLevelByMode()
@@ -39,25 +43,29 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Loads a level depending on Normal or Pro Mode
     /// </summary>
-    public void LoadLevelByMode(bool proMode)
+    public void LoadLevelByMode(GameType gameType)
     {
-        IsProMode = proMode;
+        IsProMode = LevelLoader.gameType.Equals(GameType.Expert);
 
         int levelToLoad = IsProMode ? GetProLevelToLoad() : GetClassicLevelToLoad();
 
-        if (IsProMode)
+        if (LevelLoader.gameType.Equals(GameType.Expert))
         {
             if (levelToLoad >= 0 && levelToLoad < proLevels.Count)
                 levelLoader.LoadLevel(proLevels[levelToLoad]);
             else
                 Debug.LogError("Invalid Pro level index: " + levelToLoad);
         }
-        else
+        else if (LevelLoader.gameType.Equals(GameType.Beginner))
         {
             if (levelToLoad >= 0 && levelToLoad < classicLevels.Count)
                 levelLoader.LoadLevel(classicLevels[levelToLoad]);
             else
                 Debug.LogError("Invalid Classic level index: " + levelToLoad);
+        }
+        else
+        {
+            levelLoader.LoadLevel(challengeLevels[LevelLoader.selectedChall].levels[Random.Range(0, 3)]);
         }
     }
 
@@ -101,7 +109,14 @@ public class GameManager : MonoBehaviour
         return lastUnlocked;
     }
 
+    public void SelectChallenge(int index)
+    {
+        LevelLoader.gameType = GameType.Challenge;
+        LevelLoader.selectedChall = index;
 
+        GameUIManager.StartDirectly = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
     /// <summary>
     /// Picks a new random Pro Mode level (for Next Level button)
@@ -130,7 +145,10 @@ public class GameManager : MonoBehaviour
     //     // Otherwise → load last unlocked (default 0 if nothing unlocked)
     //     int lastUnlocked = Mathf.Clamp(progress.lastUnlockedLevel - 1, 0, levels.Count - 1);
     //     return lastUnlocked;
-    // }
-
+    // }    
 }
 
+[System.Serializable]
+public class Challanges {
+    public List<LevelData> levels;
+}

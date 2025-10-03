@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     private List<Vector3> dragPath = new List<Vector3>(); // stores local positions of boxes only
     private HashSet<Vector3> placedPositions = new HashSet<Vector3>(); // local positions
 
-
     private float laneMoveSpeed = 10f;
 
     private float dragStartTime;
@@ -32,7 +31,6 @@ public class PlayerController : MonoBehaviour
     private bool shapeCompleted = false; // Track when the shape is completed
     private bool inputEnabled = true; // Control input state
     private float normalMoveSpeed;
-
 
     private bool pendingBreakthrough = false;
     public float breakthroughTriggerOffset = 0.5f; // distance before wall to trigger
@@ -55,7 +53,8 @@ public class PlayerController : MonoBehaviour
     private enum GestureType { None, Swipe, Drag }
     private GestureType currentGesture = GestureType.None;
 
-
+    public Transform ground;
+    private int lanes;
 
     void Start()
     {
@@ -92,6 +91,19 @@ public class PlayerController : MonoBehaviour
         // Debug.Log(currentWall.name);
 
         startGame = false;
+    }
+
+    public void SetGround(int lanes)
+    {
+        this.lanes = (lanes - 1);
+        //Debug.Log("lll : " + this.lanes);
+        for (int i = 0; i < ground.childCount; i++)
+        {
+            if (i < lanes)
+                ground.GetChild(i).gameObject.SetActive(true);
+            else
+                ground.GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     public int TotalWallToClear()
@@ -579,7 +591,7 @@ public class PlayerController : MonoBehaviour
         float snappedY = Mathf.Round(pos.y);
 
         // 🔹 Always restrict horizontal placement into range [-3, 0]
-        snappedX = Mathf.Clamp(snappedX, -3f, 0f);
+        snappedX = Mathf.Clamp(snappedX, -lanes, 0f);
 
         return new Vector3(snappedX, snappedY, 0f);
     }
@@ -768,11 +780,11 @@ public class PlayerController : MonoBehaviour
         int targetLane = currentLane + direction;
 
         // Clamp allowed lanes between -3 and 0
-        if (targetLane < -3 || targetLane > 0)
+        if (targetLane < -lanes || targetLane > 0)
             return false;
 
         // Check player root itself
-        if (targetLane < -3 || targetLane > 0)
+        if (targetLane < -lanes || targetLane > 0)
             return false;
 
         // Check all attached cubes
@@ -782,7 +794,7 @@ public class PlayerController : MonoBehaviour
             float shiftedX = pos.x + targetLane;
 
             // If any cube would fall outside bounds → block
-            if (shiftedX < -3 || shiftedX > 0)
+            if (shiftedX < -lanes || shiftedX > 0)
             {
                 Debug.Log($"❌ Blocked: cube {pos} would end up at lane {shiftedX}");
                 return false;

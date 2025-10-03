@@ -23,7 +23,8 @@ public class GameUIManager : MonoBehaviour
     public GameObject gameCompletePanel, winPanel;
     [Header("UI Elements")]
 
-    public TextMeshProUGUI starsText, menuStarsText;
+    public TextMeshProUGUI starsText;
+    public TextMeshProUGUI menuStarsText;
     public TextMeshProUGUI rewardText;  // For displaying reward amount or message
     public Button pauseButton;           // Pause button in gameplay UI
     public Image levelFillImage;       // Progress bar using image fill
@@ -37,7 +38,8 @@ public class GameUIManager : MonoBehaviour
 
     [Header("Main Menu Buttons")]
 
-    public Button classicModeButton, proModeButton;
+    public Button beginnerModeButton;
+    public Button expertModeButton;
     public Button levelButton;
     public Button shopButton;
     public Button settingsButton;
@@ -123,8 +125,9 @@ public class GameUIManager : MonoBehaviour
     //     levelTextLatest.text = (currentLevel + 1).ToString();
     //     scoretextBest.text = PlayerPrefs.GetInt("BestScore", 0).ToString();
     // }
-    void UpdateStarsUI()
+    public void UpdateStarsUI()
     {
+        Debug.Log("ok=");
         starsText.text = ProgressManager.Instance.Progress.stars.ToString();
         // int coins = PlayerPrefs.GetInt("coins", 0);
         // menuStarsText.text = coins.ToString();
@@ -163,8 +166,8 @@ public class GameUIManager : MonoBehaviour
         // Time.timeScale = 0f;  // Pause game at start
 
         // Setup pause button event
-        if (classicModeButton != null) classicModeButton.onClick.AddListener(OnLevelButton);
-        if (proModeButton != null) proModeButton.onClick.AddListener(OnProLevelButton);
+        if (beginnerModeButton != null) beginnerModeButton.onClick.AddListener(OnLevelButton);
+        if (expertModeButton != null) expertModeButton.onClick.AddListener(OnProLevelButton);
         if (pauseButton != null) pauseButton.onClick.AddListener(PauseGame);
         if (levelButton != null) levelButton.onClick.AddListener(OnLevelButton);
         if (shopButton != null) shopButton.onClick.AddListener(OnShopButton);
@@ -458,22 +461,49 @@ public class GameUIManager : MonoBehaviour
         // calculate stars reward
         int wallCount = playerController.TotalWallToClear();
         int stars = wallCount * 5;
+        if (LevelLoader.gameType.Equals(GameType.Challenge))
+            stars = AddCoin();
         ProgressManager.Instance.AddStars(stars); // shared pool
         ShowReward(stars);
 
         ColorManager.OnGameEnd();
 
-        gameCompletePanel.SetActive(true);
+        //gameCompletePanel.SetActive(true);
         PlayConfettiSequence();
 
         // ✅ Delay popup
         StartCoroutine(ShowWinPopupWithDelay(2f));
+
+        for (int i = 0; i < GameManager.letters.Count; i++)
+        {
+            Debug.Log("l : " + GameManager.letters[i]);
+        }
+    }
+
+    private int AddCoin()
+    {
+        if (LevelLoader.selectedChall.Equals(0))
+            return 100;
+        else if (LevelLoader.selectedChall.Equals(1))
+            return 100;
+        else if (LevelLoader.selectedChall.Equals(2))
+            return 100;
+        else if (LevelLoader.selectedChall.Equals(3))
+            return 150;
+        else if (LevelLoader.selectedChall.Equals(4))
+            return 150;
+        else if (LevelLoader.selectedChall.Equals(5))
+            return 200;
+        else if (LevelLoader.selectedChall.Equals(6))
+            return 200;
+        else
+            return 100;
     }
 
     private IEnumerator ShowWinPopupWithDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        winPanel.SetActive(true);
+        gameCompletePanel.SetActive(true);
 
     }
 
@@ -491,6 +521,7 @@ public class GameUIManager : MonoBehaviour
 
     private void OnLevelButton()
     {
+        LevelLoader.gameType = GameType.Beginner;
         SoundManager.Instance.PlayButtonClick();
         levelPanel.SetActive(true);
         // Debug.Log("Open Level Selection Panel");
@@ -500,6 +531,7 @@ public class GameUIManager : MonoBehaviour
 
     private void OnProLevelButton()
     {
+        LevelLoader.gameType = GameType.Expert;
         SoundManager.Instance.PlayButtonClick();
         proLevelPanel.SetActive(true); // open Pro level selection
     }

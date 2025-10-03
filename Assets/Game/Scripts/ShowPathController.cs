@@ -24,7 +24,6 @@ public class ShowPathController : MonoBehaviour
 
     void LateUpdate()
     {
-
         // if (forceCompleted)
         // {
         //     // ✅ Always green if wall is completed
@@ -32,7 +31,6 @@ public class ShowPathController : MonoBehaviour
         //     SetColor(endBox, completedColor);
         //     return;
         // }
-
 
         RaycastHit hit;
         Vector3 origin = transform.position;

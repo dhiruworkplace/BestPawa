@@ -4,7 +4,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class WallShape
 {
-    public int width = 4;
+    public int width = 3;
     public int height = 6;
     public bool[] gridArray; // wall cubes
     public bool[] starArray; // optional stars
@@ -28,5 +28,6 @@ public class WallShape
 public class LevelData : ScriptableObject
 {
     public string levelName;
+    public int lanes = 4;
     public List<WallShape> walls;
 }
